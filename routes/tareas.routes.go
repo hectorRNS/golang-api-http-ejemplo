@@ -4,6 +4,8 @@ import (
 	"strconv"
 
 	"github.com/gofiber/fiber/v3"
+	"gorm.io/driver/sqlite"
+	"gorm.io/gorm"
 )
 
 func TareasRoute(route fiber.Router) {
@@ -21,20 +23,15 @@ type Tareas struct {
 }
 
 func ListadoHandler(c fiber.Ctx) error {
-	tareas := []*Tareas{
-		{
-			Tarea: "Tarea 1",
-			Id:    1,
-		},
-		{
-			Tarea: "Tarea 2",
-			Id:    2,
-		},
-		{
-			Tarea: "Tarea 33",
-			Id:    3,
-		},
+
+	db, err := gorm.Open(sqlite.Open("tareas.db"), &gorm.Config{})
+
+	if err != nil {
+		return c.SendString("error conexion base de datos")
 	}
+
+	var tareas []Tareas
+	db.Limit(6).Find(&tareas)
 
 	return c.JSON(tareas)
 }
@@ -48,31 +45,16 @@ func BuscarHandler(c fiber.Ctx) error {
 		return c.SendString("Parametro invalido")
 	}
 
-	var tareaEncontrada Tareas
+	db, err := gorm.Open(sqlite.Open("tareas.db"), &gorm.Config{})
 
-	tareas := []*Tareas{
-		{
-			Tarea: "Tarea 1",
-			Id:    1,
-		},
-		{
-			Tarea: "Tarea 2",
-			Id:    2,
-		},
-		{
-			Tarea: "Tarea 33",
-			Id:    3,
-		},
+	if err != nil {
+		return c.SendString("error conexion base de datos")
 	}
 
-	for _, tarea := range tareas {
+	var tareas Tareas
+	db.First(&tareas, tareaId)
 
-		if tarea.Id == tareaId {
-			tareaEncontrada = *tarea
-		}
-	}
-
-	return c.JSON(tareaEncontrada)
+	return c.JSON(tareas)
 }
 
 func handler(c fiber.Ctx) error {
