@@ -11,8 +11,12 @@ Este proyecto fue creado cómo ejemplo de demostración de conocimiento de uso d
 - Inicio / curl http://localhost:3000 && echo
 - Tarea Listado / curl http://localhost:3000/api/tareas && echo
 - Tarea Listado Por ID / curl http://localhost:3000/api/tareas/(tareaId) && echo
+- Crear Tarea / curl -H "Content-type: application/x-www-form-urlencoded" \
+     -d "tarea=foo" \
+     -X POST \
+     http://localhost:3000/api/tareas && echo
 
-### crear un alias para air (live reloader)
+### Crear un alias para air (live reloader)
 - alias air='$(go env GOPATH)/bin/air'
 
 ---
