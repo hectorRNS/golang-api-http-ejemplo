@@ -36,6 +36,8 @@ func BuscarHandler(c fiber.Ctx) error {
 		return c.SendString("Parametro invalido")
 	}
 
+	// log.Info(tareaId)
+
 	db, err := gorm.Open(sqlite.Open("tareas.db"), &gorm.Config{})
 
 	if err != nil {
@@ -73,6 +75,44 @@ func AlmacenarHandler(c fiber.Ctx) error {
 	return c.SendString("Creado correctamente")
 }
 
-func Handler(c fiber.Ctx) error {
-	return c.SendString("Hello, World")
+// * trabajar esto
+func ActualizarHandler(c fiber.Ctx) error {
+
+	request := new(Tareas)
+
+	if err := c.Bind().Body(request); err != nil {
+		return err
+	}
+
+	db, err := gorm.Open(sqlite.Open("tareas.db"), &gorm.Config{})
+
+	if err != nil {
+		return c.SendString("error conexion base de datos")
+	}
+
+	db.Model(&Tareas{}).Where("i = ?", request.Id).Update("name", request.Tarea).Limit(1)
+
+	return c.SendString("Actualizado correctamente")
+}
+
+type TareaId struct {
+	TareaId int `json:"tarea-id" xml:"tarea-id" form:"tarea-id"`
+}
+
+func BorrarHandler(c fiber.Ctx) error {
+	request := new(TareaId)
+
+	if err := c.Bind().Body(request); err != nil {
+		return err
+	}
+
+	db, err := gorm.Open(sqlite.Open("tareas.db"), &gorm.Config{})
+
+	if err != nil {
+		return c.SendString("error conexion base de datos")
+	}
+
+	db.Delete(&Tareas{}, request.TareaId).Limit(1)
+
+	return c.SendString("Borrado correctamente")
 }
