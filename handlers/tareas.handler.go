@@ -3,15 +3,11 @@ package handlers
 import (
 	"strconv"
 
+	"ejemplo.com/fiber/structs"
 	"github.com/gofiber/fiber/v3"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
-
-type Tareas struct {
-	Id    int    `json:"id"`
-	Tarea string `json:"tarea"`
-}
 
 func ListadoHandler(c fiber.Ctx) error {
 
@@ -21,7 +17,7 @@ func ListadoHandler(c fiber.Ctx) error {
 		return c.SendString("error conexion base de datos")
 	}
 
-	var tareas []Tareas
+	var tareas []structs.Tareas
 	db.Limit(6).Find(&tareas)
 
 	return c.JSON(tareas)
@@ -44,18 +40,14 @@ func BuscarHandler(c fiber.Ctx) error {
 		return c.SendString("error conexion base de datos")
 	}
 
-	var tareas Tareas
+	var tareas structs.Tareas
 	db.First(&tareas, tareaId)
 
 	return c.JSON(tareas)
 }
 
-type NuevaTarea struct {
-	Tarea string `json:"tarea" xml:"tarea" form:"tarea"`
-}
-
 func AlmacenarHandler(c fiber.Ctx) error {
-	request := new(NuevaTarea)
+	request := new(structs.NuevaTarea)
 
 	if err := c.Bind().Body(request); err != nil {
 		return err
@@ -69,7 +61,7 @@ func AlmacenarHandler(c fiber.Ctx) error {
 		return c.SendString("error conexion base de datos")
 	}
 
-	tarea := Tareas{Tarea: request.Tarea}
+	tarea := structs.Tareas{Tarea: request.Tarea}
 	db.Create(&tarea)
 
 	return c.SendString("Creado correctamente")
@@ -77,7 +69,7 @@ func AlmacenarHandler(c fiber.Ctx) error {
 
 func ActualizarHandler(c fiber.Ctx) error {
 
-	request := new(Tareas)
+	request := new(structs.Tareas)
 
 	if err := c.Bind().Body(request); err != nil {
 		return err
@@ -94,12 +86,8 @@ func ActualizarHandler(c fiber.Ctx) error {
 	return c.SendString("Actualizado correctamente")
 }
 
-type TareaId struct {
-	TareaId int `json:"tarea-id" xml:"tarea-id" form:"tarea-id"`
-}
-
 func BorrarHandler(c fiber.Ctx) error {
-	request := new(TareaId)
+	request := new(structs.TareaId)
 
 	if err := c.Bind().Body(request); err != nil {
 		return err
@@ -111,7 +99,7 @@ func BorrarHandler(c fiber.Ctx) error {
 		return c.SendString("error conexion base de datos")
 	}
 
-	db.Delete(&Tareas{}, request.TareaId).Limit(1)
+	db.Delete(&structs.Tareas{}, request.TareaId).Limit(1)
 
 	return c.SendString("Borrado correctamente")
 }
