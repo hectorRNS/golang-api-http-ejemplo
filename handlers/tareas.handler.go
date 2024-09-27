@@ -75,7 +75,6 @@ func AlmacenarHandler(c fiber.Ctx) error {
 	return c.SendString("Creado correctamente")
 }
 
-// * trabajar esto
 func ActualizarHandler(c fiber.Ctx) error {
 
 	request := new(Tareas)
@@ -90,7 +89,7 @@ func ActualizarHandler(c fiber.Ctx) error {
 		return c.SendString("error conexion base de datos")
 	}
 
-	db.Model(&Tareas{}).Where("i = ?", request.Id).Update("name", request.Tarea).Limit(1)
+	db.Save(&request).Limit(1)
 
 	return c.SendString("Actualizado correctamente")
 }

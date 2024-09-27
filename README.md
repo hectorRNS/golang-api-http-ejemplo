@@ -19,6 +19,11 @@ Este proyecto fue creado cómo ejemplo de demostración de conocimiento de uso d
      -d "tarea-id=4" \
      -X DELETE \
      http://localhost:3000/api/tareas && echo
+- Actualizar Tarea / curl -H "Content-type: application/x-www-form-urlencoded" \
+     -d "id=3" \
+     -d "tarea=nuevo dato" \
+     -X PUT \
+     http://localhost:3000/api/tareas && echo
 
 ### Crear un alias para air (live reloader)
 - alias air='$(go env GOPATH)/bin/air'
