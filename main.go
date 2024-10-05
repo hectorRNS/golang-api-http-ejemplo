@@ -30,7 +30,6 @@ func nombreValido(fl validator.FieldLevel) bool {
 func main() {
 
 	validate := validator.New()
-	// Registrar la validación personalizada
 	validate.RegisterValidation("texto", nombreValido)
 
 	app := fiber.New(fiber.Config{
