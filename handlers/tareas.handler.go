@@ -31,6 +31,10 @@ func BuscarHandler(c fiber.Ctx) error {
 		return c.SendString("Parametro invalido")
 	}
 
+	if tareaId > 999999999 || tareaId < 1 {
+		return c.SendString("longitud invalida")
+	}
+
 	db, err := dbConexion.Conectar()
 
 	if err != nil {
