@@ -2,6 +2,8 @@
 Este proyecto fue creado cómo ejemplo de demostración de conocimiento de uso del lenguaje Golang.
 
 ## Desarrollo
+- log.Println(variables) (para debuggear)
+- log.Info(variable) (para debuggear)
 
 ### Correr codigo
 - go run main.go

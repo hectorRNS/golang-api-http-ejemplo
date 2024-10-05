@@ -3,15 +3,14 @@ package handlers
 import (
 	"strconv"
 
+	"ejemplo.com/fiber/dbConexion"
 	"ejemplo.com/fiber/structs"
 	"github.com/gofiber/fiber/v3"
-	"gorm.io/driver/sqlite"
-	"gorm.io/gorm"
 )
 
 func ListadoHandler(c fiber.Ctx) error {
 
-	db, err := gorm.Open(sqlite.Open("tareas.db"), &gorm.Config{})
+	db, err := dbConexion.Conectar()
 
 	if err != nil {
 		return c.SendString("error conexion base de datos")
@@ -32,9 +31,7 @@ func BuscarHandler(c fiber.Ctx) error {
 		return c.SendString("Parametro invalido")
 	}
 
-	// log.Info(tareaId)
-
-	db, err := gorm.Open(sqlite.Open("tareas.db"), &gorm.Config{})
+	db, err := dbConexion.Conectar()
 
 	if err != nil {
 		return c.SendString("error conexion base de datos")
@@ -53,9 +50,7 @@ func AlmacenarHandler(c fiber.Ctx) error {
 		return err
 	}
 
-	// log.Println(request.Tarea)
-
-	db, err := gorm.Open(sqlite.Open("tareas.db"), &gorm.Config{})
+	db, err := dbConexion.Conectar()
 
 	if err != nil {
 		return c.SendString("error conexion base de datos")
@@ -75,7 +70,7 @@ func ActualizarHandler(c fiber.Ctx) error {
 		return err
 	}
 
-	db, err := gorm.Open(sqlite.Open("tareas.db"), &gorm.Config{})
+	db, err := dbConexion.Conectar()
 
 	if err != nil {
 		return c.SendString("error conexion base de datos")
@@ -93,7 +88,7 @@ func BorrarHandler(c fiber.Ctx) error {
 		return err
 	}
 
-	db, err := gorm.Open(sqlite.Open("tareas.db"), &gorm.Config{})
+	db, err := dbConexion.Conectar()
 
 	if err != nil {
 		return c.SendString("error conexion base de datos")
