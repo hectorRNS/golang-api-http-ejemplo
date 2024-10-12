@@ -33,7 +33,14 @@ func main() {
 	app.Get("/", handler)
 	routes.TareasRoute(api)
 
+	// HTTP
 	log.Fatal(app.Listen(":3000"))
+
+	// para agregar TLS, HTTPS
+	// log.Fatal(app.Listen(":3001", fiber.ListenConfig{
+	// 	CertFile:    "certs/server.crt",
+	// 	CertKeyFile: "certs/server.key",
+	// }))
 }
 
 func handler(c fiber.Ctx) error {
