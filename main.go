@@ -2,38 +2,28 @@ package main
 
 import (
 	"log"
-	"regexp"
 
 	"ejemplo.com/fiber/routes"
+	"ejemplo.com/fiber/validaciones"
 	"github.com/go-playground/validator/v10"
 	"github.com/goccy/go-json" // libreria para hacer mas rapido el manejo de json
 	"github.com/gofiber/fiber/v3"
 )
 
-type structValidator struct {
+type StructValidator struct {
 	validate *validator.Validate
 }
 
-// Validator needs to implement the Validate method
-func (v *structValidator) Validate(out any) error {
+func (v *StructValidator) Validate(out any) error {
 	return v.validate.Struct(out)
 }
 
-// Texto validos para nombres y descripciones
-var nombreRegex = regexp.MustCompile(`^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ\s]+$`)
-
-// Función de validación personalizada
-func nombreValido(fl validator.FieldLevel) bool {
-	return nombreRegex.MatchString(fl.Field().String())
-}
-
 func main() {
-
 	validate := validator.New()
-	validate.RegisterValidation("texto", nombreValido)
+	validaciones.RegistrarValiaciones(validate)
 
 	app := fiber.New(fiber.Config{
-		StructValidator: &structValidator{validate: validate},
+		StructValidator: &StructValidator{validate: validate},
 		JSONEncoder:     json.Marshal,
 		JSONDecoder:     json.Unmarshal,
 	})
